@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Calculator</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: #f0f0f0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .container {
+      background-color: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+      width: 300px;
+    }
+
+    .screen {
+      background-color: #222;
+      color: #fff;
+      font-size: 32px;
+      padding: 20px;
+      text-align: right;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      overflow: hidden;
+    }
+
+    .buttons {
+      display: flex;
+      gap: 10px;
+    }
+
+    .number-buttons,
+    .operator-buttons {
+      display: grid;
+      gap: 10px;
+    }
+
+    .number-buttons {
+      grid-template-columns: repeat(3, 1fr);
+      flex: 2;
+    }
+
+    .operator-buttons {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      justify-content: space-between;
+    }
+
+    button {
+      padding: 12px 16px;
+      font-size: 18px;
+      border: none;
+      border-radius: 6px;
+      background-color: #f0f0f0;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+    }
+
+    button:hover {
+      background-color: #ddd;
+    }
+
+    .operator-buttons button {
+      background-color: #4a90e2;
+      color: white;
+    }
+
+    .operator-buttons button:nth-child(6) {
+      background-color: #28a745;
+    }
+
+    .operator-buttons button:nth-child(5) {
+      background-color: #dc3545;
+    }
+
+    .operator-buttons button:hover {
+      background-color: #357ab8;
+    }
+
+    button:active {
+      transform: scale(0.95);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="screen" id="screen"></div>
+    <div class="buttons">
+      <div class="number-buttons">
+        <button>7</button>
+        <button>8</button>
+        <button>9</button>
+        <button>4</button>
+        <button>5</button>
+        <button>6</button>
+        <button>1</button>
+        <button>2</button>
+        <button>3</button>
+        <button>0</button>
+        <button>.</button>
+      </div>
+      <div class="operator-buttons">
+        <button>+</button>
+        <button>-</button>
+        <button>*</button>
+        <button>/</button>
+        <button>C</button>
+        <button>=</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const screen = document.getElementById('screen');
+      const buttons = document.querySelectorAll('.number-buttons button, .operator-buttons button');
+
+      let errorState = false;
+      let operationDone = false;
+
+      const handleInput = (value) => {
+        if (errorState) {
+          if (value === 'C') {
+            screen.textContent = '';
+            errorState = false;
+            return;
+          } else if (value !== '=') {
+            screen.textContent = value;
+            errorState = false;
+            return;
+          }
+        }
+
+        if (operationDone) {
+          screen.textContent = '';
+          operationDone = false;
+        }
+
+        switch (value) {
+          case 'C':
+            screen.textContent = '';
+            break;
+          case '=':
+            try {
+              let result = eval(screen.textContent);
+              if (typeof result === 'number') {
+                result = +result.toFixed(6);
+              }
+              screen.textContent = result;
+              operationDone = true;
+            } catch {
+              screen.textContent = 'ERROR!';
+              errorState = true;
+            }
+            break;
+          default:
+            screen.textContent += value;
+        }
+      };
+
+      buttons.forEach(button => {
+        const value = button.textContent;
+
+        button.addEventListener('click', () => handleInput(value));
+        button.addEventListener('touchstart', (e) => {
+          e.preventDefault();
+          handleInput(value);
+        }, { passive: false });
+      });
+    });
+  </script>
+</body>
+</html>
