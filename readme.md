@@ -4,7 +4,7 @@ A simple, clean calculator built with HTML, CSS, and JavaScript. Supports basic 
 
 ## 🌐 Live Demo
 
-🔗 [Try the Calculator](https://kullaniciAdin.github.io/calculator-app/)
+🔗 [Try the Calculator](https://mmcagdas.github.io/calculator-app/)
 
 ## ✨ Features
 
